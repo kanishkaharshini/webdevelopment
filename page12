@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Friendship Quiz - Your Score</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+    
+    body {
+      background: coral;
+      color: #333;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 40px 20px;
+      overflow-y: auto;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 40px 60px;
+      max-width: 500px;
+      text-align: center;
+      animation: fadeInScale 0.8s ease forwards;
+    }
+
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    h1, h2 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    .score-circle {
+      margin: 20px auto;
+      background: #fff;
+      color: #ff6b6b;
+      font-size: 2.4rem;      
+      font-weight: 800;
+      width: 140px;
+      height: 140px;
+      line-height: 140px;
+      border-radius: 50%;
+      box-shadow: 0 10px 25px rgba(255, 107, 107, 0.6);
+      user-select: none;
+      animation: pulse 1.5s infinite;
+      letter-spacing: 2px;    
+      white-space: nowrap;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 10px 25px rgba(255, 107, 107, 0.6);
+      }
+      50% {
+        box-shadow: 0 10px 40px rgba(255, 107, 107, 0.9);
+      }
+    }
+
+    .message {
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #ff6b6b;
+    }
+
+    .explanation {
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 35px;
+      line-height: 1.5;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #fff;
+      color: #ff6b6b;
+      border: none;
+      padding: 12px 30px;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 6px 15px rgba(255, 107, 107, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ff6b6b;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    table {
+      margin-top: 40px;
+      width: 100%;
+      border-collapse: collapse;
+      color: white;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      text-align: left;
+    }
+
+    th {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your Friendship Score</h1>
+    <div class="score-circle" id="score">0</div>
+    <div class="message" id="message">Calculating...</div>
+    <div class="explanation" id="explanation"></div>
+
+    <div class="button-group">
+      <button onclick="restartQuiz()">Try Again</button>
+      <button onclick="refreshLeaderboard()">Refresh Leaderboard</button>
+    </div>
+
+    <h2>Leaderboard</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboard-body">
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const name = localStorage.getItem('playerName') || null;
+    const score = parseInt(localStorage.getItem('friendshipScore')) || 0;
+    const totalQuestions = 10;
+
+    document.getElementById('score').textContent = `${score} / ${totalQuestions}`;
+
+    let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+
+    if (name) {
+      leaderboard.push({ name, score });
+      localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+    }
+
+    function getFriendshipLevel(score) {
+      if (score >= 7) {
+        return {
+          level: "Besties",
+          explanation: "You and your friend are inseparable! Your bond is unbreakable and full of trust."
+        };
+      } else if (score >= 5) {
+        return {
+          level: "Best Friend",
+          explanation: "You know each other very well and share a deep connection."
+        };
+      } else if (score >= 3) {
+        return {
+          level: "Good Friend",
+          explanation: "You have a solid friendship and enjoy spending time together."
+        };
+      } else {
+        return {
+          level: "Friend",
+          explanation: "You are friends, but there’s room to grow and understand each other better."
+        };
+      }
+    }
+
+    const result = getFriendshipLevel(score);
+    document.getElementById('message').textContent = result.level;
+    document.getElementById('explanation').textContent = result.explanation;
+
+    function renderLeaderboard() {
+      const tableBody = document.getElementById('leaderboard-body');
+      tableBody.innerHTML = '';
+
+      leaderboard.forEach((entry, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${entry.name}</td>
+          <td>${entry.score} / ${totalQuestions}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    renderLeaderboard();
+
+    function restartQuiz() {
+      localStorage.removeItem('friendshipScore');
+      window.location.href = "q1.html"; 
+    }
+
+    function refreshLeaderboard() {
+      localStorage.removeItem('leaderboard');
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
+
