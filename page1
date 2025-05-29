@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Friendscheck</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      color: #444;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    #head {
+      background: linear-gradient(90deg, coral, orangered);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 10%;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+
+    #head h1 {
+      font-size: 2.4rem;
+      font-weight: 900;
+      margin: 0;
+      letter-spacing: 0.15em;
+    }
+
+    #head h1 span:nth-child(2) { color: greenyellow; }
+    #head h1 span:nth-child(4) { color: blue; }
+    #head h1 span:nth-child(6) { color: yellow; }
+    #head h1 span:nth-child(8) { color: darkmagenta; }
+    #head h1 span:nth-child(10) { color: crimson; }
+
+    #head nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    #head select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #head nav p {
+      margin: 0;
+      cursor: pointer;
+      font-weight: 600;
+      color: #fff;
+      transition: color 0.3s ease;
+    }
+
+    #head nav p:hover {
+      color: #333;
+    }
+
+    main {
+      flex-grow: 1;
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 20px;
+    }
+
+    main h1 {
+      text-align: center;
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      color: #222;
+      font-weight: 700;
+    }
+
+    main h2 {
+      text-align: center;
+      color: cornflowerblue;
+      margin-bottom: 1.2rem;
+    }
+
+    main ol {
+      max-width: 500px;
+      margin: 0 auto 3rem auto;
+      padding-left: 1.2rem;
+      color: #555;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    main ol li {
+      margin-bottom: 1rem;
+    }
+
+    .form-container {
+      background: #fff;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 2rem 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      text-align: center;
+    }
+
+    .form-container h1 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: coral;
+      font-weight: 700;
+    }
+
+    input[type="text"] {
+      width: 90%;
+      font-size: 1.2rem;
+      padding: 12px 15px;
+      border: 2px solid coral;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.3s ease;
+      text-align: center;
+    }
+
+    input[type="text"]:focus {
+      border-color: orangered;
+    }
+
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      background-color: orangered;
+      color: #fff;
+      border: none;
+      padding: 14px 0;
+      font-size: 1.3rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 5px 12px rgba(251, 91, 33, 0.5);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e03e00;
+      box-shadow: 0 7px 18px rgba(224, 62, 0, 0.7);
+    }
+
+    @media (max-width: 600px) {
+      #head {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 5%;
+      }
+
+      main h1 {
+        font-size: 2rem;
+      }
+
+      main ol {
+        max-width: 100%;
+        padding-left: 1rem;
+      }
+
+      .form-container {
+        max-width: 90%;
+        padding: 1.5rem 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header id="head">
+    <h1>
+      F<span>.</span> R<span>.</span> I<span>.</span> E<span>.</span> N<span>.</span> D
+    </h1>
+    <nav>
+      <select aria-label="Select Language">
+        <option value="" disabled selected>Language</option>
+        <option value="English">English</option>
+        <option value="Tamil">Tamil</option>
+        <option value="Hindi">Hindi</option>
+      </select>
+      <p tabindex="0">About Us</p>
+      <p tabindex="0">Contact Us</p>
+    </nav>
+  </header>
+
+  <main>
+    <h1>How well do you know about your friend?</h1>
+    <h2>Instructions:</h2>
+    <ol>
+      <li>Enter your name</li>
+      <li>Answer any 10 questions about your friend (Do Not Cheat)</li>
+      <li>Check your score at the scoreboard</li>
+    </ol>
+
+    <section class="form-container">
+      <h1>Enter your name</h1>
+      <input type="text" class="input" id="playerName" placeholder="(e.g., Jack)" required />
+      <button type="button" onclick="startQuiz()">START</button>
+    </section>
+  </main>
+
+  <script>
+    function startQuiz() {
+      const name = document.getElementById("playerName").value.trim();
+      if (!name) {
+        alert("Please enter your name before starting the quiz.");
+        return;
+      }
+
+      localStorage.setItem("playerName", name);
+      window.location.href = "q1.html";
+    }
+  </script>
+</body>
+</html>
