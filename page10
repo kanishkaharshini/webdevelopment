@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Friendship Quiz - Question 9</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+    }
+    h1 {
+      background-color: #ff5c1c;
+      padding: 20px;
+      color: black;
+      font-weight: bold;
+    }
+    .options {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 40px auto;
+      max-width: 800px;
+    }
+    .option {
+      border: 4px solid transparent;
+      padding: 5px;
+      cursor: pointer;
+      transition: border 0.3s ease;
+      border-radius: 8px;
+    }
+    .option img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .btns {
+      margin-top: 30px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #ff5c1c;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 6px;
+      font-size: 1rem;
+      margin: 0 10px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover:not(:disabled) {
+      background-color: #d94b17;
+    }
+    button:disabled {
+      background-color: #ffb49a;
+      cursor: not-allowed;
+    }
+    .correct {
+      border: 4px solid green;
+    }
+    .wrong {
+      border: 4px solid red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Which seafood does your friend love the most?</h1>
+
+  <div class="options">
+    <div class="option" onclick="checkAnswer(this, false)">
+      <img src="c:\Users\kanis\Downloads\sf1.jpg" alt="Grilled Fish" />
+    </div>
+    <div class="option" onclick="checkAnswer(this, true)">
+      <img src="c:\Users\kanis\Downloads\f2.jpg" alt="Prawns" />
+    </div>
+    <div class="option" onclick="checkAnswer(this, false)">
+      <img src="c:\Users\kanis\Downloads\sf3.jpg" alt="Crab Curry" />
+    </div>
+    <div class="option" onclick="checkAnswer(this, false)">
+      <img src="c:\Users\kanis\Downloads\sf4.jpg" alt="Squid Rings" />
+    </div>
+  </div>
+
+  <div class="btns">
+    <button onclick="goBack()">Previous</button>
+    <button id="nextBtn" onclick="goNext()" disabled>Next</button>
+  </div>
+
+  <script>
+    let answered = false;
+
+    function checkAnswer(element, isCorrect) {
+      if (answered) return;
+      answered = true;
+
+      if (isCorrect) {
+        element.classList.add("correct");
+      } else {
+        element.classList.add("wrong");
+      }
+
+      // Disable all options
+      document.querySelectorAll('.option').forEach(opt => {
+        opt.onclick = null;
+      });
+
+      // Update score in localStorage
+      let currentScore = parseInt(localStorage.getItem('friendshipScore')) || 0;
+      if (isCorrect) currentScore++;
+      localStorage.setItem('friendshipScore', currentScore);
+
+      // Enable "Next" button
+      document.getElementById('nextBtn').disabled = false;
+    }
+
+    function goBack() {
+      window.location.href = "q8.html";
+    }
+
+    function goNext() {
+      window.location.href = "q10.html";
+    }
+  </script>
+</body>
+</html>
